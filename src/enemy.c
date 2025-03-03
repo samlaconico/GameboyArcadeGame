@@ -46,6 +46,6 @@ void enemy_update(State *g_state, Enemy *e)
 }
 void enemy_draw(State *g_state, Enemy *e)
 {
-    DrawRectangleRec(e->hitbox, RED);
+    // DrawRectangleRec(e->hitbox, RED);
     DrawTextureRec(g_state->spritesheet, (Rectangle){64, 16, 16, 16}, e->position, WHITE);
 }
