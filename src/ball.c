@@ -9,7 +9,9 @@ void ball_init(State *g_state)
 void ball_update(State *g_state)
 {
     g_state->Ball.hitbox = (Rectangle){g_state->Ball.position.x + 2, g_state->Ball.position.y + 2, 12, 12};
-    g_state->Ball.velocity = Vector2Scale(g_state->Ball.velocity, .89);
+
+    if (!CheckCollisionRecs(g_state->Ball.hitbox, g_state->Player.hitbox))
+        g_state->Ball.velocity = Vector2Scale(g_state->Ball.velocity, .89);
     g_state->Ball.position.x += g_state->Ball.velocity.x;
     g_state->Ball.position.y += g_state->Ball.velocity.y;
 
@@ -19,13 +21,13 @@ void ball_update(State *g_state)
         g_state->Ball.moving = false;
 
     if ((g_state->Ball.position.x + g_state->Ball.hitbox.width) + g_state->Ball.velocity.x >= 157 ||
-        (g_state->Ball.position.x) + g_state->Ball.velocity.x <= 3)
+        (g_state->Ball.position.x) + g_state->Ball.velocity.x <= 3 || CheckCollisionRecs((Rectangle){g_state->Ball.hitbox.x + g_state->Ball.velocity.x, g_state->Ball.hitbox.y}, g_state->Player.hitbox))
     {
         g_state->Ball.velocity.x *= -1;
     }
 
     if ((g_state->Ball.position.y + g_state->Ball.hitbox.height) + g_state->Ball.velocity.y >= 141 ||
-        (g_state->Ball.position.y) + g_state->Ball.velocity.y <= 3)
+        (g_state->Ball.position.y) + g_state->Ball.velocity.y <= 3 || CheckCollisionRecs((Rectangle){g_state->Ball.hitbox.x, g_state->Ball.hitbox.y + g_state->Ball.velocity.y}, g_state->Player.hitbox))
     {
         g_state->Ball.velocity.y *= -1;
     }

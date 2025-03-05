@@ -8,24 +8,24 @@ struct Player
     Vector2 position;
     Rectangle hitbox;
     int health;
+    Texture2D hurt_texture;
 } Player;
 
 typedef struct Enemy
 {
-    bool active;
-    Vector2 position;
-    Vector2 velocity;
+    bool active, hurt;
+    Vector2 position, velocity;
     Rectangle hitbox;
-    float attack_timer;
+    float attack_timer, hurt_timer;
     int health;
+    Texture2D hurt_texture;
+
 } Enemy;
 
 struct Ball
 {
-    bool active;
-    bool moving;
-    Vector2 position;
-    Vector2 velocity;
+    bool active, moving;
+    Vector2 position, velocity;
     Rectangle hitbox;
 } Ball;
 
