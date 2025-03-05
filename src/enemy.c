@@ -31,12 +31,12 @@ void enemy_update(State *g_state, Enemy *e)
         e->attack_timer = 0;
     }
 
-    if ((e->hitbox.x + e->hitbox.width) + e->velocity.x > 160 || e->hitbox.x < 0)
+    if ((e->hitbox.x + e->hitbox.width) + e->velocity.x > 157 || e->hitbox.x < 3)
     {
         e->velocity.x *= -1;
     }
 
-    if ((e->hitbox.y + e->hitbox.height) + e->velocity.y > 144 || e->hitbox.y < 0)
+    if ((e->hitbox.y + e->hitbox.height) + e->velocity.y > 141 || e->hitbox.y < 3)
     {
         e->velocity.y *= -1;
     }
@@ -47,7 +47,6 @@ void enemy_update(State *g_state, Enemy *e)
         g_state->Ball.velocity.y *= -1;
 
         hurt_self(e);
-        g_state->score += 100;
     }
 
     if (e->hurt)
@@ -64,6 +63,7 @@ void enemy_update(State *g_state, Enemy *e)
     if (e->health == 0)
     {
         e->active = false;
+        g_state->score += 100;
     }
 
     e->velocity.x *= .94f;

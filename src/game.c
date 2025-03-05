@@ -34,7 +34,7 @@ void game_init(State *g_state)
 
     for (int i = 0; i < 10; i++)
     {
-        g_state->enemy_list[i].position = (Vector2){GetRandomValue(0, 160), GetRandomValue(0, 144)};
+        g_state->enemy_list[i].position = (Vector2){GetRandomValue(3, 140), GetRandomValue(3, 126)};
         enemy_init(g_state, &g_state->enemy_list[i]);
     }
 

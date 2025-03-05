@@ -31,8 +31,9 @@ void player_init(State *g_state)
     direction = DOWN;
     current_animation = idle_down[current_frame];
     attacking = false;
-    attack_hitbox = (Rectangle){g_state->Player.position.x, g_state->Player.position.y + 16, 16, 16};
+    attack_hitbox = (Rectangle){g_state->Player.position.x, g_state->Player.position.y + 16, 16, 8};
     g_state->Player.active = true;
+    g_state->Player.position = (Vector2){100, 100};
 
     hurt_image = LoadImageFromTexture(g_state->spritesheet);
     ImageColorReplace(&hurt_image, (Color){15, 56, 15, 255}, WHITE);
@@ -117,12 +118,14 @@ void player_update(State *g_state)
 
     velocity = Vector2ClampValue(velocity, -1, 1);
 
-    if ((CheckCollisionRecs((Rectangle){g_state->Player.hitbox.x + velocity.x, g_state->Player.hitbox.y, g_state->Player.hitbox.width, g_state->Player.hitbox.height}, g_state->Ball.hitbox)))
+    if ((CheckCollisionRecs((Rectangle){g_state->Player.hitbox.x + velocity.x, g_state->Player.hitbox.y, g_state->Player.hitbox.width, g_state->Player.hitbox.height}, g_state->Ball.hitbox)) ||
+        g_state->Player.hitbox.x + velocity.x < 3 || (g_state->Player.hitbox.x + g_state->Player.hitbox.width) + velocity.x > 157)
     {
         velocity.x = 0;
     }
 
-    if ((CheckCollisionRecs((Rectangle){g_state->Player.hitbox.x, g_state->Player.hitbox.y + velocity.y, g_state->Player.hitbox.width, g_state->Player.hitbox.height}, g_state->Ball.hitbox)))
+    if ((CheckCollisionRecs((Rectangle){g_state->Player.hitbox.x, g_state->Player.hitbox.y + velocity.y, g_state->Player.hitbox.width, g_state->Player.hitbox.height}, g_state->Ball.hitbox)) ||
+        g_state->Player.position.y + velocity.y < 3 || (g_state->Player.hitbox.y + g_state->Player.hitbox.height) + velocity.y > 141)
     {
         velocity.y = 0;
     }
@@ -196,7 +199,7 @@ void player_update(State *g_state)
     g_state->Player.position.x += velocity.x;
     g_state->Player.position.y += velocity.y;
 
-    g_state->Player.hitbox = (Rectangle){g_state->Player.position.x, g_state->Player.position.y, 16, 16};
+    g_state->Player.hitbox = (Rectangle){g_state->Player.position.x + 2, g_state->Player.position.y + 8, 12, 8};
 
     animation_handler();
 }
@@ -222,8 +225,9 @@ void player_draw(State *g_state)
         }
     }
 
-    DrawText(TextFormat("%f", velocity.x), 100, 100, 10, RED);
-    DrawText(TextFormat("%f", velocity.y), 100, 120, 10, RED);
+    // DrawText(TextFormat("%f", velocity.x), 100, 100, 10, RED);
+    // DrawText(TextFormat("%f", velocity.y), 100, 120, 10, RED);
+    //  DrawRectangleRec(g_state->Player.hitbox, RED);
 
     DrawTextureRec(g_state->spritesheet, current_animation, g_state->Player.position, (WHITE));
 }
