@@ -12,6 +12,7 @@ void ball_update(State *g_state)
 
     if (!CheckCollisionRecs(g_state->Ball.hitbox, g_state->Player.hitbox))
         g_state->Ball.velocity = Vector2Scale(g_state->Ball.velocity, .89);
+
     g_state->Ball.position.x += g_state->Ball.velocity.x;
     g_state->Ball.position.y += g_state->Ball.velocity.y;
 
@@ -35,7 +36,5 @@ void ball_update(State *g_state)
 
 void ball_draw(State *g_state)
 {
-    // DrawRectangleRec(g_state->Ball.hitbox, RED);
-
     DrawTextureRec(g_state->spritesheet, (Rectangle){32, 32, 16, 16}, g_state->Ball.position, WHITE);
 }

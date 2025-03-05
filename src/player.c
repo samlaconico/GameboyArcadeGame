@@ -205,8 +205,6 @@ void player_draw(State *g_state)
 {
     if (attacking)
     {
-        // DrawRectangleRec(attack_hitbox, RED);
-
         switch (direction)
         {
         case UP:
@@ -226,7 +224,6 @@ void player_draw(State *g_state)
 
     DrawText(TextFormat("%f", velocity.x), 100, 100, 10, RED);
     DrawText(TextFormat("%f", velocity.y), 100, 120, 10, RED);
-    // DrawRectangleRec(g_state->Player.hitbox, RED);
 
     DrawTextureRec(g_state->spritesheet, current_animation, g_state->Player.position, (WHITE));
 }
