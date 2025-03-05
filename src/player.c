@@ -24,6 +24,7 @@ int timer = 0;
 bool attacking;
 
 DIRECTION direction;
+Image hurt_image;
 
 void player_init(State *g_state)
 {
@@ -32,6 +33,13 @@ void player_init(State *g_state)
     attacking = false;
     attack_hitbox = (Rectangle){g_state->Player.position.x, g_state->Player.position.y + 16, 16, 16};
     g_state->Player.active = true;
+
+    hurt_image = LoadImageFromTexture(g_state->spritesheet);
+    ImageColorReplace(&hurt_image, (Color){15, 56, 15, 255}, WHITE);
+    ImageColorReplace(&hurt_image, (Color){139, 172, 15, 255}, WHITE);
+    ImageColorReplace(&hurt_image, (Color){48, 98, 48, 255}, WHITE);
+
+    g_state->Player.hurt_texture = LoadTextureFromImage(hurt_image);
 }
 
 void animation_handler()
@@ -79,12 +87,12 @@ void player_update(State *g_state)
 {
     if (IsKeyDown(KEY_RIGHT))
     {
-        velocity.x += 10;
+        velocity.x += 12 * GetFrameTime();
         direction = RIGHT;
     }
     else if (IsKeyDown(KEY_LEFT))
     {
-        velocity.x -= 10;
+        velocity.x -= 12 * GetFrameTime();
         direction = LEFT;
     }
     else
@@ -94,12 +102,12 @@ void player_update(State *g_state)
 
     if (IsKeyDown(KEY_UP))
     {
-        velocity.y -= 10;
+        velocity.y -= 12 * GetFrameTime();
         direction = UP;
     }
     else if (IsKeyDown(KEY_DOWN))
     {
-        velocity.y += 10;
+        velocity.y += 12 * GetFrameTime();
         direction = DOWN;
     }
     else
@@ -107,8 +115,17 @@ void player_update(State *g_state)
         velocity.y = 0;
     }
 
-    velocity.x *= .87f;
-    velocity.y *= .87f;
+    velocity = Vector2ClampValue(velocity, -1, 1);
+
+    if ((CheckCollisionRecs((Rectangle){g_state->Player.hitbox.x + velocity.x, g_state->Player.hitbox.y, g_state->Player.hitbox.width, g_state->Player.hitbox.height}, g_state->Ball.hitbox)))
+    {
+        velocity.x = 0;
+    }
+
+    if ((CheckCollisionRecs((Rectangle){g_state->Player.hitbox.x, g_state->Player.hitbox.y + velocity.y, g_state->Player.hitbox.width, g_state->Player.hitbox.height}, g_state->Ball.hitbox)))
+    {
+        velocity.y = 0;
+    }
 
     if (velocity.x > 0)
     {
@@ -176,8 +193,8 @@ void player_update(State *g_state)
         break;
     }
 
-    g_state->Player.position.x += (velocity.x * GetFrameTime());
-    g_state->Player.position.y += velocity.y * GetFrameTime();
+    g_state->Player.position.x += velocity.x;
+    g_state->Player.position.y += velocity.y;
 
     g_state->Player.hitbox = (Rectangle){g_state->Player.position.x, g_state->Player.position.y, 16, 16};
 
@@ -207,8 +224,8 @@ void player_draw(State *g_state)
         }
     }
 
-    // DrawText(TextFormat("%f", velocity.x), 100, 100, 10, RED);
-    // DrawText(TextFormat("%f", velocity.y), 100, 120, 10, RED);
+    DrawText(TextFormat("%f", velocity.x), 100, 100, 10, RED);
+    DrawText(TextFormat("%f", velocity.y), 100, 120, 10, RED);
     // DrawRectangleRec(g_state->Player.hitbox, RED);
 
     DrawTextureRec(g_state->spritesheet, current_animation, g_state->Player.position, (WHITE));
