@@ -36,5 +36,6 @@ void ball_update(State *g_state)
 
 void ball_draw(State *g_state)
 {
+    // DrawRectangleRec(g_state->Ball.hitbox, RED);
     DrawTextureRec(g_state->spritesheet, (Rectangle){32, 32, 16, 16}, g_state->Ball.position, WHITE);
 }

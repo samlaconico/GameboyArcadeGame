@@ -56,6 +56,8 @@ void game_update(State *g_state)
                 enemy_update(g_state, &g_state->enemy_list[i]);
         }
         break;
+    case TITLE:
+        break;
     }
 }
 
@@ -103,6 +105,9 @@ void game_draw(State *g_state)
             if (g_state->enemy_list[i].active)
                 enemy_draw(g_state, &g_state->enemy_list[i]);
         }
+        break;
+
+    case TITLE:
         break;
     }
 }

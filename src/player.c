@@ -64,23 +64,8 @@ void attack(State *g_state)
     attacking = true;
     if (CheckCollisionRecs(attack_hitbox, g_state->Ball.hitbox))
     {
-        if (g_state->Player.position.x < g_state->Ball.position.x)
-        {
-            g_state->Ball.velocity.x += Clamp(fabs(10 / (1 + fabsf((g_state->Ball.position.y + 8) - (g_state->Player.position.y + 8)))), 0, 40);
-        }
-        else
-        {
-            g_state->Ball.velocity.x -= Clamp(fabs(10 / (1 + fabsf((g_state->Ball.position.y + 8) - (g_state->Player.position.y + 8)))), 0, 40);
-        }
-
-        if (g_state->Player.position.y < g_state->Ball.position.y)
-        {
-            g_state->Ball.velocity.y += Clamp(fabs(10 / (1 + fabsf((g_state->Ball.position.x + 8) - (g_state->Player.position.x + 8)))), 0, 40);
-        }
-        else
-        {
-            g_state->Ball.velocity.y -= Clamp(fabs(10 / (1 + fabsf((g_state->Ball.position.x + 8) - (g_state->Player.position.x + 8)))), 0, 40);
-        }
+        g_state->Ball.velocity.x += Clamp(((g_state->Ball.hitbox.x + (g_state->Ball.hitbox.width / 2)) - (g_state->Player.hitbox.x + (g_state->Player.hitbox.width / 2))) / (fabsf((g_state->Ball.hitbox.y + (g_state->Ball.hitbox.height / 2)) - (g_state->Player.hitbox.y + (g_state->Player.hitbox.height / 2)))), -10, 10);
+        g_state->Ball.velocity.y += Clamp(((g_state->Ball.hitbox.y + (g_state->Ball.hitbox.height / 2)) - (g_state->Player.hitbox.y + (g_state->Player.hitbox.height / 2))) / (fabsf((g_state->Ball.hitbox.x + (g_state->Ball.hitbox.width / 2)) - (g_state->Player.hitbox.x + (g_state->Player.hitbox.width / 2)))), -10, 10);
     }
 }
 
@@ -208,6 +193,8 @@ void player_draw(State *g_state)
 {
     if (attacking)
     {
+        DrawRectangleRec(attack_hitbox, RED);
+
         switch (direction)
         {
         case UP:
@@ -227,7 +214,9 @@ void player_draw(State *g_state)
 
     // DrawText(TextFormat("%f", velocity.x), 100, 100, 10, RED);
     // DrawText(TextFormat("%f", velocity.y), 100, 120, 10, RED);
-    //  DrawRectangleRec(g_state->Player.hitbox, RED);
+    // DrawText(TextFormat("%f", ((g_state->Ball.hitbox.x + (g_state->Ball.hitbox.width / 2)) - (g_state->Player.hitbox.x + (g_state->Player.hitbox.width / 2))) / (fabsf((g_state->Ball.hitbox.y + (g_state->Ball.hitbox.height / 2)) - (g_state->Player.hitbox.y + (g_state->Player.hitbox.height / 2))))), 100, 120, 10, RED);
+    // DrawRectangleRec(g_state->Player.hitbox, RED);
 
     DrawTextureRec(g_state->spritesheet, current_animation, g_state->Player.position, (WHITE));
+    // DrawPixel(g_state->Player.hitbox.x + (g_state->Player.hitbox.width / 2), g_state->Player.position.y, BLUE);
 }
