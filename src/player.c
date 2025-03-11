@@ -193,7 +193,7 @@ void player_draw(State *g_state)
 {
     if (attacking)
     {
-        DrawRectangleRec(attack_hitbox, RED);
+        // DrawRectangleRec(attack_hitbox, RED);
 
         switch (direction)
         {
